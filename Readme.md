@@ -106,15 +106,64 @@ and used while loops.this codes shows how much we need carrots and how much we c
 
 ![alt text](./pic/pic6.png)
 * in the f6 code I wrote controls my movement through a grid, starting with a move south. In a continuous loop, I move east across each row. Within each column, I move north, checking if there’s anything to harvest—and if there is, I harvest it. I keep an eye on my water tank supplies; if I have fewer than 100 empty tanks, I trade for more. If my water level drops below .75, I refill using a water tank. Once I’ve covered a column, I move east to the next one and repeat the whole process
-
+*code*
+move(South)
+while True:
+	for x in range(get_world_size()):
+		move(North)
+		if can_harvest():
+			harvest()
+			if num_items(Items.Water_Tank) < 100:
+				trade(Items.Empty_Tank)
+			if get_water() < 0.75:
+				use_item(Items.Water_Tank)
+	move(East)	
+			
 
 ![alt text](./pic/pic7.png)
 * In this code, I created several functions to manage different tasks on my farm efficiently. The main function, plant_tree, is responsible for moving across the grid and planting trees in specific spots. As I go through each row and column, I check if the coordinates meet certain conditions (in this case, x % 3 == 0 and y % 2 == 0). If they do, I plant a tree and harvest any resources that are ready. If a spot doesn’t meet these conditions, I plant a bush instead. After each planting action, I adjust my movement—either moving south within a column or moving east to the next column.
 
+*code*
+clear()
+def plant_tree():
+	for x in range(get_world_size()):
+		for y in range(get_world_size()):
+			Watering(.75)
+			if(x + y) % 2 == 0:
+				if can_harvest():
+					harvest()
+				plant(Entities.Tree)
+			else:
+				if can_harvest():
+					harvest()
+				plant(Entities.Bush)
+			move(South)
+		move(East)
+			
+
+
 * I also created a Watering function that checks the water level and refills it by a specified percentage if it’s too low. This helps keep the crops watered as I work across the grid. Then, I have a harvest_grid function that goes through the entire grid, checking each cell to see if there’s anything ready to harvest. Before harvesting, I make sure the ground type is suitable by tilling if necessary.
+
+*code*
+def Watering(percent):
+	if get_water() < percent:
+		use_item(Items.Water_Tank)
+
 
 * Finally, I connected these functions to form a larger sequence. The Plant Crop section uses a while loop to run plant_tree and harvest_grid repeatedly until I’ve reached a specific wood requirement (10,000 units). This way, my code keeps planting, watering, and harvesting in a loop, creating a self-sustaining system that achieves my resource goals. By structuring it this way, each function handles a specific task, and they all work together to keep the farm running smoothly
 
+*code*
+def harvest_grid():
+	for x in range(get_world_size()):
+		for y in range(get_world_size()):
+			if get_ground_type() != Grounds.Soil:
+				till()
+			if can_harvest():
+				harvest()
+				move(South)
+		
+		move(East)
+harvest_grid()
 
 
 *Notes*
