@@ -27,7 +27,7 @@ do a flip()
 - This code harvest the hay and it will flip after one harvest. After collecting more hay we can unlock the while loop code where the code 
 will harvest continously
 
-*After being unlocked while Ture*
+*After being unlocked while True*
 python
 while True:
    if can_harvest():
